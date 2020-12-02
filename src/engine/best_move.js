@@ -3,8 +3,8 @@ import minimax from "./minimax.js";
 function best_move(board){
     let move;
     let best = 100;
-    for(index = 0; index < board.length; index++){
-        if(board[index] == 0){
+    for(let index = 0; index < board.length; index++){
+        if(board[index] === 0){
             board[index] = -1;
             const value = minimax(board, 1, 0);
             board[index] = 0;

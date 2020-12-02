@@ -1,7 +1,8 @@
 function game_over(board){
-    for(value in board)
-        if(value == 0)
+    for(let i = 0; i < 9; i++){
+        if(board[i] === 0)
             return 0;
+    }
     return 1;
 }
 export default game_over;
