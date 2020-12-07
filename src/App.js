@@ -6,17 +6,24 @@ import check_win from './engine/check_win';
 import game_over from './engine/game_over';
 
 function App() {
-  //const [state0, setState0] = useState(0);
-  //const [state0, setState0] = useState(0);
+  const [time, updateTime] = useState(0);
   const { colorMode, toggleColorMode } = useColorMode();
+  const [intervalID, setID] = useState(0);
   useEffect(() => {
     if(colorMode === 'light')
       toggleColorMode();
   }, []);
   const[board, setBoard] = useState(new Array(9).fill(0));
-//new Array(9).fill(0)
+
+  function update(){
+    if(game_over(board) === 0)
+      updateTime(prev => prev + 1);
+  }
+
   function handleClick(id){
     if(board[id] === 0 && check_win(board) === 0){
+        if(intervalID == 0)
+          setID(setInterval(update, 10));
         let newBoard = [...board];
         newBoard[id] = 1;
         if(check_win(newBoard) === 0 && game_over(newBoard) === 0){
@@ -28,12 +35,18 @@ function App() {
   }
 
   function displayStatus(){
-    if(check_win(board) === 1)
+    if(check_win(board) === 1){
+      clearInterval(intervalID);
       return "Player wins";
-    else if(check_win(board) === -1)
+    }
+    else if(check_win(board) === -1){
+      clearInterval(intervalID);
       return "Machine wins";
-    else if(game_over(board) === 1)
+    }
+    else if(game_over(board) === 1){
+      clearInterval(intervalID);
       return "It's a draw";
+    }
     return "Game in progress";
   }
   function fetchChar(code){
@@ -45,7 +58,15 @@ function App() {
       return '';
   }
   function reset(){
+    setID(0);
+    updateTime(0);
     setBoard(new Array(9).fill(0));
+  }
+  function showTime(){
+    let mili = time % 100;
+    let seconds = time - mili;
+    seconds = seconds / 100;
+    return seconds + "." + mili;
   }
   return (
     <div className="App">
@@ -70,6 +91,7 @@ function App() {
         </Grid>
       </Center>
         <h1 color='#000000'>{displayStatus()}</h1>
+        <h2 color='#000000'>{showTime()}</h2>
         
     </div>
   );
