@@ -58,6 +58,7 @@ function App() {
       return '';
   }
   function reset(){
+    clearInterval(intervalID);
     setID(0);
     updateTime(0);
     setBoard(new Array(9).fill(0));
